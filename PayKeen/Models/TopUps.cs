@@ -17,7 +17,7 @@ namespace PayKeen.Models
 
         public string RecipientName { get; set; }
 
-        public string Amount { get; set; }
+        public decimal Amount { get; set; }
 
         public DateTime MadeAt { get; set; }
     }

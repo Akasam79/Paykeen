@@ -13,6 +13,13 @@ namespace PayKeen.Controllers.Api
         private ApplicationDbContext _context;
         public static string message { get; set; } = "error occured";
 
+        Recharge recharge = new Recharge();
+        Payment pay = new Payment();
+        CreateUser create = new CreateUser();
+        Wallet wallet = new Wallet();
+        PinReset reset = new PinReset();
+
+
         public DefaultController()
         {
             _context = new ApplicationDbContext();
@@ -21,22 +28,41 @@ namespace PayKeen.Controllers.Api
         public string main([FromForm] string from, [FromForm] string sms)
         {
             string[] parameters = sms.Split(null);
+            string keyword = parameters[0].ToLower();
 
-            if (string.Equals(parameters[0], "enroll", StringComparison.OrdinalIgnoreCase))
+            switch (keyword)
             {
-                CreateUser create = new CreateUser();
-                create.AddUser(from, parameters);
-            }
-            else if (string.Equals(parameters[0], "pay", StringComparison.OrdinalIgnoreCase))
-            {
-                Payment pay = new Payment();
-                pay.payment(from, parameters);
+                case "enroll":
+                    create.AddUser(from, parameters);
+                    break;
 
-            }
-            else if (string.Equals(parameters[0], "confirm", StringComparison.OrdinalIgnoreCase))
-            {
-                Payment pay = new Payment();
-                pay.confirmPayment(from, parameters);
+                case "pay":
+                    pay.Payments(from, parameters);
+                    break;
+
+                case "confirm":
+                    pay.ConfirmPayment(from, parameters);
+                    break;
+
+                case "recharge":
+                    recharge.TopUp(from, parameters);
+                    break;
+
+                case "confirmr":
+                    recharge.ConfirmTopUp(from, parameters);
+                    break;
+
+                case "balance":
+                    wallet.Balance(from, parameters);
+                    break;
+
+                case "reset":
+                    reset.ResetPin(from, parameters);
+                    break;
+
+                default:
+                    DefaultController.message = "Invalid keyword";
+                    return DefaultController.message;
             }
             return message;
         }

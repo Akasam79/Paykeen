@@ -21,7 +21,7 @@ namespace PayKeen.Services
         //keyword : PAY
         //phone : Phone;
         //SMS: pay mShortCode amount
-        public string payment(string phone, string[] data)
+        public string Payments(string phone, string[] data)
         {
             try
             {
@@ -118,7 +118,7 @@ namespace PayKeen.Services
 
         // keyword: confirm
         // confirm PIN transID
-        public string confirmPayment(string phone, string[] data)
+        public string ConfirmPayment(string phone, string[] data)
         {
             int tokenLength = data.Length;
             if (tokenLength > 3 || tokenLength < 3)
