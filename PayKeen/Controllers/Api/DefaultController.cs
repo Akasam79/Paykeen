@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PayKeen.Models;
 using PayKeen.Services;
-using System;
-using System.Net.Http.Formatting;
 
 namespace PayKeen.Controllers.Api
 {
@@ -10,22 +7,17 @@ namespace PayKeen.Controllers.Api
     [ApiController]
     public class DefaultController : ControllerBase
     {
-        private ApplicationDbContext _context;
         public static string message { get; set; } = "error occured";
 
-        Recharge recharge = new Recharge();
-        Payment pay = new Payment();
-        CreateUser create = new CreateUser();
-        Wallet wallet = new Wallet();
-        PinReset reset = new PinReset();
+        readonly Recharge recharge = new();
+        readonly Payment pay = new();
+        readonly CreateUser create = new();
+        readonly Wallet wallet = new();
+        readonly PinReset reset = new();
 
 
-        public DefaultController()
-        {
-            _context = new ApplicationDbContext();
-        }
         [HttpPost]
-        public string main([FromForm] string from, [FromForm] string sms)
+        public string Main([FromForm] string from, [FromForm] string sms)
         {
             string[] parameters = sms.Split(null);
             string keyword = parameters[0].ToLower();
