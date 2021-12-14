@@ -171,9 +171,9 @@ namespace PayKeen.Services
                 }
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                DefaultController.message = "Internal server error";
+                DefaultController.message = "Internal server error" + ex.Message;
 
 
             }
