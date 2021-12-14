@@ -61,7 +61,7 @@ namespace PayKeen.Controllers.Api
         [HttpGet]
         public string GetDefaultRoute()
         {
-            return "SetUp complete";
+            return "API is running just fine";
         }
     }
 }
