@@ -70,35 +70,31 @@ namespace PayKeen.Services
                         FullName = fullName,
                         Balance = defaultBalance
                     };
-
-                    _context.Users.Add(user);
-                    _context.Merchants.Add(merchant);
-                    _context.MWallet.Add(mwallet);
-                    try
+                    var checkIfUserExists = _context.Users.Where(c => string.Equals(c.Phone, phone)).FirstOrDefault()?.Id ?? -1;
+                    if (checkIfUserExists == -1)
                     {
+                        _context.Users.Add(user);
+                        _context.Merchants.Add(merchant);
+                        _context.MWallet.Add(mwallet);
+
                         int result = _context.SaveChanges();
-                        if( result == 3)
+                        if (result == 3)
                         {
-                            DefaultController.message = "Successfully added user";
+                            DefaultController.message = $"Registration successful!, your meerchant code is {merchantShortCode}";
 
                         }
                         else
                         {
                             DefaultController.message = "error occured when creating account";
+                            return DefaultController.message;
                         }
 
                     }
-                    catch (SqlException e)
+                    else
                     {
-                        if (e.Number == 2601)
-                        {
-                            DefaultController.message = "Phone number is already registered with PayKeen";
-                        }
-                        else
-                        {
-                            DefaultController.message = "internal server error " + e;
-                        }
+                        DefaultController.message = "Phone number already registered";
                     }
+                    
                 }
                 else if (tokenLength == 4 || tokenLength == 5 && userType.Equals("customer"))
                 {
@@ -146,20 +142,40 @@ namespace PayKeen.Services
                             Balance = defaultBalance
                         };
 
-                        _context.Users.Add(user);
-                        _context.Customers.Add(customer);
-                        _context.CWallet.Add(cwallet);
-                        DefaultController.message = "Successfully added user";
-                        _context.SaveChanges();
+                        var checkIfUserExists = _context.Users.Where(c => string.Equals(c.Phone, phone)).FirstOrDefault()?.Id ?? -1;
+                        if (checkIfUserExists == -1)
+                        {
+                            _context.Users.Add(user);
+                            _context.Customers.Add(customer);
+                            _context.CWallet.Add(cwallet);
+
+                            int result = _context.SaveChanges();
+                            if (result == 3)
+                            {
+                                DefaultController.message = $"Registration successful!, your pin is {newPin} ";
+
+                            }
+                            else
+                            {
+                                DefaultController.message = "error occured when creating account";
+                                return DefaultController.message;
+                            }
+
+                        }
+                        else
+                        {
+                            DefaultController.message = "Phone number already registered";
+                        }
+
                     }
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
+                DefaultController.message = "Internal server error";
 
-                Console.WriteLine("internal server error " + ex);
-                
+
             }
             return DefaultController.message;
 

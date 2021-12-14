@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace PayKeen.Services
 {
     
-    // Keyword Retrieve
+    // Keyword balance
     //phone : Phone;
     //SMS: balance +pin
     public class Wallet
